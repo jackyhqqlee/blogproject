@@ -18,7 +18,9 @@ class Category(models.Model):
     Django 内置的全部类型可查看文档：
     https://docs.djangoproject.com/en/1.10/ref/models/fields/#field-types
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,verbose_name='类别名称')
+    def __str__(self):
+        return self.name
 
 @python_2_unicode_compatible
 class Tag(models.Model):
@@ -26,7 +28,9 @@ class Tag(models.Model):
     标签 Tag 也比较简单，和 Category 一样。
     再次强调一定要继承 models.Model 类！
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,verbose_name='标签名称')
+    def __str__(self):
+        return self.name
 
 @python_2_unicode_compatible
 class Post(models.Model):
@@ -35,19 +39,19 @@ class Post(models.Model):
     """
 
     # 文章标题
-    title = models.CharField(max_length=70)
+    title = models.CharField(max_length=70,verbose_name='标题')
 
     # 文章正文，我们使用了 TextField。
     # 存储比较短的字符串可以使用 CharField，但对于文章的正文来说可能会是一大段文本，因此使用 TextField 来存储大段文本。
-    body = models.TextField()
+    body = models.TextField(verbose_name='正文')
 
     # 这两个列分别表示文章的创建时间和最后一次修改时间，存储时间的字段用 DateTimeField 类型。
-    created_time = models.DateTimeField()
-    modified_time = models.DateTimeField()
+    created_time = models.DateTimeField(verbose_name='创建时间')
+    modified_time = models.DateTimeField(verbose_name='修改时间')
 
     # 文章摘要，可以没有文章摘要，但默认情况下 CharField 要求我们必须存入数据，否则就会报错。
     # 指定 CharField 的 blank=True 参数值后就可以允许空值了。
-    excerpt = models.CharField(max_length=200, blank=True)
+    excerpt = models.CharField(max_length=200, blank=True,verbose_name='摘要')
 
     def save(self, *args, **kwargs):
         # 如果没有填写摘要
@@ -72,16 +76,16 @@ class Post(models.Model):
     # 同时我们规定文章可以没有标签，因此为标签 tags 指定了 blank=True。
     # 如果你对 ForeignKey、ManyToManyField 不了解，请看教程中的解释，亦可参考官方文档：
     # https://docs.djangoproject.com/en/1.10/topics/db/models/#relationships
-    category = models.ForeignKey(Category)
-    tags = models.ManyToManyField(Tag, blank=True)
+    category = models.ForeignKey(Category,verbose_name='类别')
+    tags = models.ManyToManyField(Tag, blank=True,verbose_name='标签')
 
     # 文章作者，这里 User 是从 django.contrib.auth.models 导入的。
     # django.contrib.auth 是 Django 内置的应用，专门用于处理网站用户的注册、登录等流程，User 是 Django 为我们已经写好的用户模型。
     # 这里我们通过 ForeignKey 把文章和 User 关联了起来。
     # 因为我们规定一篇文章只能有一个作者，而一个作者可能会写多篇文章，因此这是一对多的关联关系，和 Category 类似。
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User,verbose_name='作者')
     # 新增 views 字段记录阅读量
-    views = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0,verbose_name='浏览量')
 
     def __str__(self):
         return self.title

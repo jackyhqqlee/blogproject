@@ -32,7 +32,7 @@
 											<form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">
   											{% csrf_token %}
  											 <div class="row">
-    										<div class="col-md-4">
+    										<div class="col-md-4" placeholder="搜索">
       										<label for="{{ form.name.id_for_label }}">名字：</label>
       										{{ form.name }}
       										{{ form.name.errors }}
@@ -43,7 +43,7 @@
       										{{ form.email.errors }}
     										</div>
     										<div class="col-md-4">
-      										<label for="{{ form.url.id_for_label }}">URL：</label>
+      										<label for="{{ form.url.id_for_label }}">浏览页面：</label>
       										{{ form.url }}
       										{{ form.url.errors }}
     										</div>
@@ -78,10 +78,7 @@
                 <div class="widget widget-content">
                     <h3 class="widget-title">文章目录</h3>
                     	<ul>
-                    		{{ post.toc|safe }}
-                    		<li>
-                            <a href="#">教程特点</a>
-                        </li>
+                    		{{ post.toc|safe }}	
                     	</ul>
                 </div>
 {% endblock toc %}
